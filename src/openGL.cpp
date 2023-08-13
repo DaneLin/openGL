@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cmath>
 #include "myShader.h"
+#include "image.cpp"
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -243,6 +244,31 @@ int main()
 
     Shader ourShader("D:\\Github\\openGL\\src\\shader.vs", "D:\\Github\\openGL\\src\\shader.fs");
 
+    //读取图像信息
+    int width, height, nrChannels;
+    unsigned char *data = stbi_load("D:\\Github\\openGL\\src\\container.jpg", &width, &height, &nrChannels, 0);
+
+    //纹理部分
+    unsigned int texture;
+    glGenTextures(1, &texture);//第一个参数，生成纹理的数量，第二个参数，保存的位置
+    glBindTexture(GL_TEXTURE_2D, texture);//绑定纹理
+    //生成纹理
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    //生成了纹理和相对应的mipmap后，释放图像的内存
+    stbi_image_free(data);
+
+    float vertices[] = {
+//     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
+     0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 右上
+     0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // 右下
+    -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // 左下
+    -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // 左上
+};
+
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
     // render loop
     // glfwWindowShouldClose检查GLFW是否被要求退出
     while (!glfwWindowShouldClose(window))
@@ -254,12 +280,12 @@ int main()
         glClearColor(.2f, .3f, .3f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        ourShader.use();
-        float timeValue = glfwGetTime();
-        float offset =  (std::sin(timeValue) / 2.f);
-        ourShader.setFloat("horizontal_offset", offset);
-        glBindVertexArray(VAOs[0]);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        // ourShader.use();
+        // float timeValue = glfwGetTime();
+        // float offset =  (std::sin(timeValue) / 2.f);
+        // ourShader.setFloat("horizontal_offset", offset);
+        // glBindVertexArray(VAOs[0]);
+        // glDrawArrays(GL_TRIANGLES, 0, 3);
 
         /*
         // 绘制三角形
