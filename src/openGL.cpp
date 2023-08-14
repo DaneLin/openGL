@@ -5,6 +5,9 @@
 #include "myShader.h"
 // #include "image.cpp"
 #include "stb_image.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -147,6 +150,19 @@ int main()
     ourShader.setInt("texture1", 0);
     ourShader.setInt("texture2", 1);
     float offset = 0.5f;
+
+
+    glm::vec4 vec(1.f, .0f, .0f, 1.f);
+    glm::mat4 tmp;
+   
+    
+    // trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0f));
+    // trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+
+    // unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
+    // glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+
+
     // render loop
     // glfwWindowShouldClose检查GLFW是否被要求退出
     while (!glfwWindowShouldClose(window))
@@ -187,9 +203,25 @@ int main()
             }
         }
 
+        glm::mat4 trans;
+        trans = glm::translate(trans, glm::vec3(std::sin(glfwGetTime()), -0.5f, 0.0f));
+        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        
+        
+
+        unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+
         ourShader.use();
         ourShader.setFloat("mix_offset", offset);
         glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        glm::mat4 trans1;
+        trans1 = glm::translate(trans1, glm::vec3(-0.5f, 0.5f, 0.0f));
+        trans1 = glm::scale(trans1, glm::vec3(1.0f, 1.0f, 1.0f) *  abs((float)std::sin(glfwGetTime())));
+
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans1));
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         // 交换颜色缓冲，其在本次迭代中用来绘制，并且将会作为输出显示在屏幕上
