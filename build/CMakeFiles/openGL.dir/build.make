@@ -52,10 +52,10 @@ RM = "C:\Program Files\CMake\bin\cmake.exe" -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = D:\Github\openGL
+CMAKE_SOURCE_DIR = D:\Github\openGL-1
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = D:\Github\openGL\build
+CMAKE_BINARY_DIR = D:\Github\openGL-1\build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/openGL.dir/depend.make
@@ -70,33 +70,33 @@ include CMakeFiles/openGL.dir/flags.make
 
 CMakeFiles/openGL.dir/src/glad.c.obj: CMakeFiles/openGL.dir/flags.make
 CMakeFiles/openGL.dir/src/glad.c.obj: CMakeFiles/openGL.dir/includes_C.rsp
-CMakeFiles/openGL.dir/src/glad.c.obj: D:/Github/openGL/src/glad.c
+CMakeFiles/openGL.dir/src/glad.c.obj: D:/Github/openGL-1/src/glad.c
 CMakeFiles/openGL.dir/src/glad.c.obj: CMakeFiles/openGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Github\openGL\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/openGL.dir/src/glad.c.obj"
-	D:\Ming\x86_64-8.1.0-release-posix-seh-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/openGL.dir/src/glad.c.obj -MF CMakeFiles\openGL.dir\src\glad.c.obj.d -o CMakeFiles\openGL.dir\src\glad.c.obj -c D:\Github\openGL\src\glad.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Github\openGL-1\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/openGL.dir/src/glad.c.obj"
+	D:\mingw64\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/openGL.dir/src/glad.c.obj -MF CMakeFiles\openGL.dir\src\glad.c.obj.d -o CMakeFiles\openGL.dir\src\glad.c.obj -c D:\Github\openGL-1\src\glad.c
 
 CMakeFiles/openGL.dir/src/glad.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/openGL.dir/src/glad.c.i"
-	D:\Ming\x86_64-8.1.0-release-posix-seh-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E D:\Github\openGL\src\glad.c > CMakeFiles\openGL.dir\src\glad.c.i
+	D:\mingw64\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E D:\Github\openGL-1\src\glad.c > CMakeFiles\openGL.dir\src\glad.c.i
 
 CMakeFiles/openGL.dir/src/glad.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/openGL.dir/src/glad.c.s"
-	D:\Ming\x86_64-8.1.0-release-posix-seh-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S D:\Github\openGL\src\glad.c -o CMakeFiles\openGL.dir\src\glad.c.s
+	D:\mingw64\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S D:\Github\openGL-1\src\glad.c -o CMakeFiles\openGL.dir\src\glad.c.s
 
 CMakeFiles/openGL.dir/src/openGL.cpp.obj: CMakeFiles/openGL.dir/flags.make
 CMakeFiles/openGL.dir/src/openGL.cpp.obj: CMakeFiles/openGL.dir/includes_CXX.rsp
-CMakeFiles/openGL.dir/src/openGL.cpp.obj: D:/Github/openGL/src/openGL.cpp
+CMakeFiles/openGL.dir/src/openGL.cpp.obj: D:/Github/openGL-1/src/openGL.cpp
 CMakeFiles/openGL.dir/src/openGL.cpp.obj: CMakeFiles/openGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Github\openGL\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/openGL.dir/src/openGL.cpp.obj"
-	D:\Ming\x86_64-8.1.0-release-posix-seh-rt_v6-rev0\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/openGL.dir/src/openGL.cpp.obj -MF CMakeFiles\openGL.dir\src\openGL.cpp.obj.d -o CMakeFiles\openGL.dir\src\openGL.cpp.obj -c D:\Github\openGL\src\openGL.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Github\openGL-1\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/openGL.dir/src/openGL.cpp.obj"
+	D:\mingw64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/openGL.dir/src/openGL.cpp.obj -MF CMakeFiles\openGL.dir\src\openGL.cpp.obj.d -o CMakeFiles\openGL.dir\src\openGL.cpp.obj -c D:\Github\openGL-1\src\openGL.cpp
 
 CMakeFiles/openGL.dir/src/openGL.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/openGL.dir/src/openGL.cpp.i"
-	D:\Ming\x86_64-8.1.0-release-posix-seh-rt_v6-rev0\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Github\openGL\src\openGL.cpp > CMakeFiles\openGL.dir\src\openGL.cpp.i
+	D:\mingw64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Github\openGL-1\src\openGL.cpp > CMakeFiles\openGL.dir\src\openGL.cpp.i
 
 CMakeFiles/openGL.dir/src/openGL.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/openGL.dir/src/openGL.cpp.s"
-	D:\Ming\x86_64-8.1.0-release-posix-seh-rt_v6-rev0\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Github\openGL\src\openGL.cpp -o CMakeFiles\openGL.dir\src\openGL.cpp.s
+	D:\mingw64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Github\openGL-1\src\openGL.cpp -o CMakeFiles\openGL.dir\src\openGL.cpp.s
 
 # Object files for target openGL
 openGL_OBJECTS = \
@@ -112,7 +112,7 @@ openGL.exe: CMakeFiles/openGL.dir/build.make
 openGL.exe: CMakeFiles/openGL.dir/linkLibs.rsp
 openGL.exe: CMakeFiles/openGL.dir/objects1.rsp
 openGL.exe: CMakeFiles/openGL.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=D:\Github\openGL\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable openGL.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=D:\Github\openGL-1\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable openGL.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\openGL.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -124,6 +124,6 @@ CMakeFiles/openGL.dir/clean:
 .PHONY : CMakeFiles/openGL.dir/clean
 
 CMakeFiles/openGL.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" D:\Github\openGL D:\Github\openGL D:\Github\openGL\build D:\Github\openGL\build D:\Github\openGL\build\CMakeFiles\openGL.dir\DependInfo.cmake "--color=$(COLOR)"
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" D:\Github\openGL-1 D:\Github\openGL-1 D:\Github\openGL-1\build D:\Github\openGL-1\build D:\Github\openGL-1\build\CMakeFiles\openGL.dir\DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/openGL.dir/depend
 

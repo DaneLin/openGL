@@ -241,7 +241,7 @@ int main()
     glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
     std::cout << "Maximum nr of vertex attributes supported: " << nrAttributes << std::endl;
 
-    Shader ourShader("D:\\Github\\openGL\\src\\shader.vs", "D:\\Github\\openGL\\src\\shader.fs");
+    Shader ourShader("../src/shader.vs", "../src/shader.fs");
 
     // render loop
     // glfwWindowShouldClose检查GLFW是否被要求退出

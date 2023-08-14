@@ -1,3 +1,3 @@
-D:/Github/openGL/build/CMakeFiles/openGL.dir
-D:/Github/openGL/build/CMakeFiles/edit_cache.dir
-D:/Github/openGL/build/CMakeFiles/rebuild_cache.dir
+D:/Github/openGL-1/build/CMakeFiles/openGL.dir
+D:/Github/openGL-1/build/CMakeFiles/edit_cache.dir
+D:/Github/openGL-1/build/CMakeFiles/rebuild_cache.dir
