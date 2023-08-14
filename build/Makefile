@@ -56,10 +56,10 @@ RM = "C:\Program Files\CMake\bin\cmake.exe" -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = D:\Github\openGL
+CMAKE_SOURCE_DIR = D:\Github\openGL-1
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = D:\Github\openGL\build
+CMAKE_BINARY_DIR = D:\Github\openGL-1\build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -86,9 +86,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\Github\openGL\build\CMakeFiles D:\Github\openGL\build\\CMakeFiles\progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\Github\openGL-1\build\CMakeFiles D:\Github\openGL-1\build\\CMakeFiles\progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\Github\openGL\build\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\Github\openGL-1\build\CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -152,6 +152,30 @@ src/glad.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGL.dir\build.make CMakeFiles/openGL.dir/src/glad.c.s
 .PHONY : src/glad.c.s
 
+src/image.obj: src/image.cpp.obj
+.PHONY : src/image.obj
+
+# target to build an object file
+src/image.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGL.dir\build.make CMakeFiles/openGL.dir/src/image.cpp.obj
+.PHONY : src/image.cpp.obj
+
+src/image.i: src/image.cpp.i
+.PHONY : src/image.i
+
+# target to preprocess a source file
+src/image.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGL.dir\build.make CMakeFiles/openGL.dir/src/image.cpp.i
+.PHONY : src/image.cpp.i
+
+src/image.s: src/image.cpp.s
+.PHONY : src/image.s
+
+# target to generate assembly for a file
+src/image.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGL.dir\build.make CMakeFiles/openGL.dir/src/image.cpp.s
+.PHONY : src/image.cpp.s
+
 src/openGL.obj: src/openGL.cpp.obj
 .PHONY : src/openGL.obj
 
@@ -188,6 +212,9 @@ help:
 	@echo ... src/glad.obj
 	@echo ... src/glad.i
 	@echo ... src/glad.s
+	@echo ... src/image.obj
+	@echo ... src/image.i
+	@echo ... src/image.s
 	@echo ... src/openGL.obj
 	@echo ... src/openGL.i
 	@echo ... src/openGL.s

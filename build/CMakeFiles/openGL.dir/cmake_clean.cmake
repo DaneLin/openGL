@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/openGL.dir/src/glad.c.obj"
   "CMakeFiles/openGL.dir/src/glad.c.obj.d"
+  "CMakeFiles/openGL.dir/src/image.cpp.obj"
+  "CMakeFiles/openGL.dir/src/image.cpp.obj.d"
   "CMakeFiles/openGL.dir/src/openGL.cpp.obj"
   "CMakeFiles/openGL.dir/src/openGL.cpp.obj.d"
   "libopenGL.dll.a"

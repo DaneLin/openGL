@@ -5,11 +5,10 @@ layout (location = 2) in vec2 aTexCoords;
 
 out vec3 ourColor;
 out vec2 TexCoord;
-uniform float horizontal_offset;
 
 void main()
 {
-    gl_Position = vec4(aPos.x + horizontal_offset, aPos.y, aPos.z, 1.0);
-    ourColor = vec3(aColor.x + horizontal_offset, aColor.y, aColor.z + horizontal_offset);
+    gl_Position = vec4(aPos.x , aPos.y, aPos.z, 1.0);
+    ourColor = vec3(aColor.x , aColor.y, aColor.z );
     TexCoord = aTexCoords;
 }
