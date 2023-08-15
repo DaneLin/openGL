@@ -6,6 +6,7 @@
 #include "myShader.h"
 // #include "image.cpp"
 #include "stb_image.h"
+#include "camera.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -13,11 +14,32 @@
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+Camera camera(cameraPos);
+
+// 鼠标位置
+float lastX = SCR_WIDTH / 2.0f;
+float lastY = SCR_HEIGHT / 2.0f;
+//鼠标是否第一次进入窗口
+bool is_first_in = true;
+// time
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
+
 // 注册一个回调函数，当窗口大小发生变化时被调用
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
 // 输入控制函数
 void processInput(GLFWwindow *window);
+
+// 监听鼠标移动事件
+void mouse_callback(GLFWwindow *window, double xpos, double ypos);
+
+// 监听鼠标滚轮事件
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
 
 int main()
 {
@@ -39,9 +61,15 @@ int main()
         return -1;
     }
     glfwMakeContextCurrent(window);
+    // 告诉GLFW隐藏光标，并且捕捉它
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // 注册这个函数，告诉GLFW我们希望每次窗口调整大小的时候，调用这个callback函数
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    // 注册鼠标回调函数，当鼠标移动时，调用该回调函数
+    glfwSetCursorPosCallback(window, mouse_callback);
+    // 注册滚轮回调函数，当鼠标移动时，调用该回调函数
+    glfwSetScrollCallback(window, scroll_callback);
 
     // GLAD是用来管理OpenGL的函数指针的
     // 所以在调用任何OpenGL函数之间，都需要初始化GLAD
@@ -202,6 +230,10 @@ int main()
     // glfwWindowShouldClose检查GLFW是否被要求退出
     while (!glfwWindowShouldClose(window))
     {
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
         // 是否按下退出
         processInput(window);
 
@@ -240,6 +272,23 @@ int main()
             }
         }
 
+        // //正z轴从屏幕指向我们，如果希望摄像机向后移动，我们就沿着z轴的正方向移动
+        // glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+        // //摄像机方向
+        // glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+        // glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
+        // //右轴
+        // glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+        // glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
+        // //上轴，现在已经有了x轴向量和z轴向量，通过叉乘得到正y轴向量
+        // glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
+
+        // 只需要定义一个摄像机位置，一个目标位置，一个表示世界空间的上向量的向量，就可以创建一个lookat矩阵
+        //  glm::mat4 view;
+        //  view = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f),
+        //      glm::vec3(0.0f, 0.0f, 0.0f),
+        //      glm::vec3(0.0f, 1.0f, 0.0f));
+
         glm::vec3 cubePositions[] = {
             glm::vec3(0.0f, 0.0f, 0.0f),
             glm::vec3(2.0f, 5.0f, -15.0f),
@@ -271,11 +320,18 @@ int main()
         glm::mat4 model;
         model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
         // 目前来说移动矩阵如下
+        float radius = 5.f;
+        float camX = sin(glfwGetTime()) * radius;
+        float camY = cos(glfwGetTime()) * radius;
         glm::mat4 view;
-        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3 * (std::sin(glfwGetTime())) - 5.0f));
-        // 定义一个投影矩阵
+        // 绕(0,0,0)旋转
+        //  view = glm::lookAt(glm::vec3(camX, 0, camY),
+        //      glm::vec3(0.0f, 0.0f, 0.0f),
+        //      glm::vec3(0.0f, 1.0f, 0.0f));
+        //  定义一个投影矩阵
+        view = camera.GetViewMatrix();
         glm::mat4 projection;
-        projection = glm::perspective(glm::radians(60.0f), 600.f / 800.f, 0.1f, 100.0f);
+        projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
         int modelLoc = glGetUniformLocation(ourShader.ID, "model");
         int viewLoc = glGetUniformLocation(ourShader.ID, "view");
@@ -337,4 +393,47 @@ void processInput(GLFWwindow *window)
     {
         glfwSetWindowShouldClose(window, true);
     }
+    float cameraSpeed = 2.5f * deltaTime;
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    {
+        camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime);
+        //cameraPos += cameraSpeed * cameraFront;
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    {
+        // cameraPos -= cameraSpeed * cameraFront;
+        camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    {
+        camera.ProcessKeyboard(Camera_Movement::LEFT, deltaTime);
+        // cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    {
+        camera.ProcessKeyboard(Camera_Movement::RIGHT, deltaTime);
+        // cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    }
+}
+
+void mouse_callback(GLFWwindow *window, double xpos, double ypos)
+{
+    if(is_first_in)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        is_first_in = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos; // y坐标是从底部往顶部依次增大的
+    lastX = xpos;
+    lastY = ypos;
+
+    camera.ProcessMouseMovement(xoffset, yoffset);
+}
+
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
+{
+    camera.ProcessMouseScroll(static_cast<float>(yoffset));
 }

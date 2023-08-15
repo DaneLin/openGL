@@ -285,6 +285,7 @@ CMakeFiles/openGL.dir/src/image.cpp.obj: D:/Github/openGL-1/src/image.cpp \
 CMakeFiles/openGL.dir/src/openGL.cpp.obj: D:/Github/openGL-1/src/openGL.cpp \
   D:/Github/openGL-1/include/GLFW/glfw3.h \
   D:/Github/openGL-1/include/KHR/khrplatform.h \
+  D:/Github/openGL-1/include/camera.h \
   D:/Github/openGL-1/include/glad/glad.h \
   D:/Github/openGL-1/include/glm/common.hpp \
   D:/Github/openGL-1/include/glm/detail/_fixes.hpp \
@@ -1031,6 +1032,8 @@ D:/mingw64/mingw64/x86_64-w64-mingw32/include/_mingw_stat64.h:
 D:/mingw64/mingw64/x86_64-w64-mingw32/include/malloc.h:
 
 D:/mingw64/mingw64/x86_64-w64-mingw32/include/mcx.h:
+
+D:/Github/openGL-1/include/camera.h:
 
 D:/mingw64/mingw64/x86_64-w64-mingw32/include/memoryapi.h:
 
