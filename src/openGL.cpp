@@ -18,6 +18,8 @@ glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
+glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+
 Camera camera(cameraPos);
 
 // 鼠标位置
@@ -80,6 +82,7 @@ int main()
     }
 
     Shader ourShader("../src/shader.vs", "../src/shader.fs");
+    Shader lightingShader("../src/shader.vs", "../src/lightShader.fs");
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
     float vertices[] = {
@@ -131,100 +134,31 @@ int main()
         1, 2, 3  // second triangle
     };
 
-    unsigned int VBO, VAO, EBO;
+    unsigned int VBO, VAO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
 
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
     // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
-    // color attribute
-    // glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(3 * sizeof(float)));
-    // glEnableVertexAttribArray(1);
-    // texture coord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
-    glEnableVertexAttribArray(2);
 
-    // 纹理部分
-    unsigned int texture;
-    glGenTextures(1, &texture);            // 第一个参数，生成纹理的数量，第二个参数，保存的位置
-    glBindTexture(GL_TEXTURE_2D, texture); // 绑定纹理
-    // set the texture wrapping paprameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // set texture filtering parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-    // 读取图像信息
-    int width, height, nrChannels;
-    stbi_set_flip_vertically_on_load(true);
-    unsigned char *data = stbi_load("D:\\Github\\openGL-1\\src\\container.jpg", &width, &height, &nrChannels, 0);
-    if (data)
-    {
-        // 生成纹理
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-
-    // 生成了纹理和相对应的mipmap后，释放图像的内存
-    stbi_image_free(data);
-
-    // texture2
-    unsigned int texture2;
-    glGenTextures(1, &texture2);
-    glBindTexture(GL_TEXTURE_2D, texture2);
-    float borderColor[] = {1.0f, 1.0f, 0.0f, 1.0f};
-    // set the texture wrapping paprameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // set texture filtering parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    // 读取图片信息
-    data = stbi_load("D:\\Github\\openGL-1\\src\\awesomeface.png", &width, &height, &nrChannels, 0);
-    if (data)
-    {
-        // note that the awesomeface.png has transparency and thus an alpha channel
-        // make sure to tell OpenGL the data type is of GL_RGBA
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data);
-
-    ourShader.use();
-    // glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 0);
-    ourShader.setInt("texture1", 0);
-    ourShader.setInt("texture2", 1);
-    float offset = 0.5f;
-
-    glm::vec4 vec(1.f, .0f, .0f, 1.f);
-    glm::mat4 tmp;
+    //为灯创建一个新的VAO
+    unsigned int lightVAO;
+    glGenVertexArrays(1, &lightVAO);
+    glBindVertexArray(lightVAO);
+    //由于此时VBO中已经包含了正确的立方体的顶点数据
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    //设置灯立方体的顶点属性
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    
 
     glEnable(GL_DEPTH_TEST);
-
-    // trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0f));
-    // trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
-
-    // unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
-    // glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
     // render loop
     // glfwWindowShouldClose检查GLFW是否被要求退出
@@ -237,125 +171,38 @@ int main()
         // 是否按下退出
         processInput(window);
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         // 渲染
-        glClearColor(.2f, .3f, .3f, 1.f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        // bind texture
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, texture2);
+        glClearColor(.1f, .1f, .1f, 1.f);
+         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         ourShader.use();
+        ourShader.setVec3("objectColor", 1.f, 0.5f, 0.31f);
+        ourShader.setVec3("lightColor", 1.0, 1.0f, 1.0f);
 
-        static double time = glfwGetTime();
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        glm::mat4 view = camera.GetViewMatrix();
+        ourShader.setMat4("projection", projection);
+        ourShader.setMat4("view", view);
 
-        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-        {
-            if (glfwGetTime() - time >= .01f)
-            {
-                time = glfwGetTime();
-                offset += 0.01f;
-                std::cout << (offset) << std::endl;
-            }
-        }
+        //world transformation
+        glm::mat4 model = glm::mat4(1.0f);
+        ourShader.setMat4("model", model);
 
-        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-        {
-            if (glfwGetTime() - time >= .01f)
-            {
-                time = glfwGetTime();
-                offset -= 0.01f;
-                std::cout << (offset) << std::endl;
-            }
-        }
-
-        // //正z轴从屏幕指向我们，如果希望摄像机向后移动，我们就沿着z轴的正方向移动
-        // glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-        // //摄像机方向
-        // glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-        // glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
-        // //右轴
-        // glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-        // glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
-        // //上轴，现在已经有了x轴向量和z轴向量，通过叉乘得到正y轴向量
-        // glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
-
-        // 只需要定义一个摄像机位置，一个目标位置，一个表示世界空间的上向量的向量，就可以创建一个lookat矩阵
-        //  glm::mat4 view;
-        //  view = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f),
-        //      glm::vec3(0.0f, 0.0f, 0.0f),
-        //      glm::vec3(0.0f, 1.0f, 0.0f));
-
-        glm::vec3 cubePositions[] = {
-            glm::vec3(0.0f, 0.0f, 0.0f),
-            glm::vec3(2.0f, 5.0f, -15.0f),
-            glm::vec3(-1.5f, -2.2f, -2.5f),
-            glm::vec3(-3.8f, -2.0f, -12.3f),
-            glm::vec3(2.4f, -0.4f, -3.5f),
-            glm::vec3(-1.7f, 3.0f, -7.5f),
-            glm::vec3(1.3f, -2.0f, -2.5f),
-            glm::vec3(1.5f, 2.0f, -2.5f),
-            glm::vec3(1.5f, 0.2f, -1.5f),
-            glm::vec3(-1.3f, 1.0f, -1.5f)};
-
-        // glm::mat4 trans;
-        // trans = glm::translate(trans, glm::vec3(std::sin(glfwGetTime()), -0.5f, 0.0f));
-        // trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-
-        // unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
-        // glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
-
-        // ourShader.use();
-        ourShader.setFloat("mix_offset", offset);
-        // glBindVertexArray(VAO);
-        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-        // glm::mat4 trans1;
-        // trans1 = glm::translate(trans1, glm::vec3(-0.5f, 0.5f, 0.0f));
-        // trans1 = glm::scale(trans1, glm::vec3(1.0f, 1.0f, 1.0f) *  abs((float)std::sin(glfwGetTime())));
-
-        glm::mat4 model;
-        model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-        // 目前来说移动矩阵如下
-        float radius = 5.f;
-        float camX = sin(glfwGetTime()) * radius;
-        float camY = cos(glfwGetTime()) * radius;
-        glm::mat4 view;
-        // 绕(0,0,0)旋转
-        //  view = glm::lookAt(glm::vec3(camX, 0, camY),
-        //      glm::vec3(0.0f, 0.0f, 0.0f),
-        //      glm::vec3(0.0f, 1.0f, 0.0f));
-        //  定义一个投影矩阵
-        view = camera.GetViewMatrix();
-        glm::mat4 projection;
-        projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-
-        int modelLoc = glGetUniformLocation(ourShader.ID, "model");
-        int viewLoc = glGetUniformLocation(ourShader.ID, "view");
-        int projectionLoc = glGetUniformLocation(ourShader.ID, "projection");
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-        // glm::vec3(rand() % 600, rand() % 800, rand() % 100)
+        //render the cube
         glBindVertexArray(VAO);
-        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        //  glDrawArrays(GL_TRIANGLES, 0, 36);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
-        for (unsigned int i = 0; i < 10; i++)
-        {
-            glm::mat4 model;
+        lightingShader.use();
+        lightingShader.setMat4("projection", projection);
+        lightingShader.setMat4("view", view);
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, lightPos);
+        model = glm::scale(model, glm::vec3(0.2f));
+        lightingShader.setMat4("model", model);
 
-            model = glm::translate(model, cubePositions[i]);
-            float angle = 20.f * i;
-            if (i % 3 == 0)
-                angle = glfwGetTime() * 25.f;
-            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
+        glBindVertexArray(lightVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        
 
         // 交换颜色缓冲，其在本次迭代中用来绘制，并且将会作为输出显示在屏幕上
         glfwSwapBuffers(window);
@@ -363,15 +210,10 @@ int main()
         // 检查有没有触发什么事件，更新窗口状态，并且调用对应的回调函数
         glfwPollEvents();
     }
-    // //在开始渲染前，必须告诉OpenGL渲染窗口的尺寸大小，即视口viewport
-    // glViewport(0, 0, 800, 600);
-
-    // optional:
-    // de-allocate all resources once they're outlived their purpose
 
     glDeleteVertexArrays(1, &VAO);
+    glDeleteVertexArrays(1, &lightVAO);
     glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
 
     // 渲染循环结束后，释放/删除之前分配的所有资源
     glfwTerminate();
