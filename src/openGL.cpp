@@ -158,8 +158,6 @@ int main()
     glEnableVertexAttribArray(0);
     
 
-    glEnable(GL_DEPTH_TEST);
-
     // render loop
     // glfwWindowShouldClose检查GLFW是否被要求退出
     while (!glfwWindowShouldClose(window))
