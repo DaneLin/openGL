@@ -82,7 +82,7 @@ int main()
     }
 
     //Shader ourShader("../src/shader.vs", "../src/shader.fs");
-    Shader GouraudShader("../src/Gouraud.vs", "../src/Gouraud.fs");
+    Shader GouraudShader("../src/shader.vs", "../src/shader.fs");
 
     Shader lightingShader("../src/lightShader.vs", "../src/lightShader.fs");
     // set up vertex data (and buffer(s)) and configure vertex attributes
@@ -155,6 +155,8 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
 
+    glEnable(GL_DEPTH_TEST);
+
     // render loop
     // glfwWindowShouldClose检查GLFW是否被要求退出
     while (!glfwWindowShouldClose(window))
@@ -175,11 +177,25 @@ int main()
         lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;
         lightPos.z = 1.0f + sin(glfwGetTime() / 2.0f) * 1.0f;
 
+        glm::vec3 lightColor;
+        lightColor.x = sin(glfwGetTime() * 2.0f);
+        lightColor.y = sin(glfwGetTime() * 0.7f);
+        lightColor.z = sin(glfwGetTime() * 1.3f);
+
         GouraudShader.use();
-        GouraudShader.setVec3("objectColor", 1.f, 0.5f, 0.31f);
-        GouraudShader.setVec3("lightColor", 1.0, 1.0f, 1.0f);
-        GouraudShader.setVec3("lightPos", lightPos);
+        GouraudShader.setVec3("light.position", lightPos);
         GouraudShader.setVec3("viewPos", camera.Position);
+
+        //light properties
+        GouraudShader.setVec3("light.ambient", 1.0f, 1.0f, 1.0f);
+        GouraudShader.setVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
+        GouraudShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+        //material properties
+        GouraudShader.setVec3("material.ambient", 0.0f, 0.1f, 0.06f);
+        GouraudShader.setVec3("material.diffuse", 0.0f, 0.50980392f, 0.50980392f);
+        GouraudShader.setVec3("material.specular", 0.50196078f, 0.50196078f, 0.50196078f);
+        GouraudShader.setFloat("material.shininess", 32.f);
 
         glm::mat4 model = glm::mat4(1.0f);
         //model = glm::rotate(model, (float)glfwGetTime() * glm::radians(45.0f), glm::vec3(1.0f, 0.0f ,0.0f));
@@ -206,6 +222,7 @@ int main()
         model = glm::scale(model, glm::vec3(0.2f));
         
         lightingShader.setMat4("model", model);
+        lightingShader.setVec3("LightColor", lightColor);
 
         glBindVertexArray(lightVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -246,22 +263,22 @@ void processInput(GLFWwindow *window)
     float cameraSpeed = 2.5f * deltaTime;
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
-        camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime);
+        camera.ProcessKeyboard(FORWARD, deltaTime);
         // cameraPos += cameraSpeed * cameraFront;
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     {
         // cameraPos -= cameraSpeed * cameraFront;
-        camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime);
+        camera.ProcessKeyboard(BACKWARD, deltaTime);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
-        camera.ProcessKeyboard(Camera_Movement::LEFT, deltaTime);
+        camera.ProcessKeyboard(LEFT, deltaTime);
         // cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
-        camera.ProcessKeyboard(Camera_Movement::RIGHT, deltaTime);
+        camera.ProcessKeyboard(RIGHT, deltaTime);
         // cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     }
 }
