@@ -171,11 +171,14 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     unsigned int diffuseMap = loadTexture("../src/container2.png");
-    unsigned int specularMap = loadTexture("../src/container2_specular.png");
+    unsigned int specularMap = loadTexture("../src/lighting_maps_specular_color.png");
+    unsigned int emissionMap = loadTexture("../src/matrix.jpg");
 
     GouraudShader.use();
     GouraudShader.setInt("material.diffuse", 0);
     GouraudShader.setInt("material.specular", 1);
+    GouraudShader.setInt("material.emission", 2);
+
 
     // render loop
     // glfwWindowShouldClose检查GLFW是否被要求退出
@@ -235,6 +238,10 @@ int main()
         //bind specular map
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, specularMap);
+
+        //bind emission map
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, emissionMap);
 
         // render the cube
         glBindVertexArray(VAO);
