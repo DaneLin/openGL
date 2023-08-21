@@ -62,7 +62,6 @@ struct Material {
     float shininess;
 };
 
-uniform Light light;
 uniform Material material;
 uniform SpotLight spotLight;
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
@@ -73,7 +72,7 @@ void main()
 {
     //属性
     vec3 norm = normalize(Normal);
-    vec3 viewDir= normalize(viewPos - fragPos);
+    vec3 viewDir= normalize(viewPos - FragPos);
 
     //定向光照
     vec3 result = CalcDirLight(dirLight, norm, viewDir);
@@ -83,7 +82,7 @@ void main()
     
     //聚光
     result += CalcSpotLight(spotLight, norm, FragPos, viewDir);
-   
+    FragColor = vec4(result, 1.0f);
 }
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
@@ -133,7 +132,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float spec = pow(max(dot(viewDir, reflectDir), 0.0f), material.shininess);
 
     float distance = length(light.position - fragPos);
-    float attenuation = 1.0 / (light.constant + light.linear * distance + light * (distance * distance));
+    float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 
     //spotlight intensity;
     float theta = dot(lightDir, normalize(-light.direction));
