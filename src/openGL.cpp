@@ -8,6 +8,8 @@
 #include "stb_image.h"
 #include "camera.h"
 
+#include "MyModel.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -197,6 +199,9 @@ int main()
     GouraudShader.setInt("material.specular", 1);
     //GouraudShader.setInt("material.emission", 2);
 
+    Shader ourShader("../src/model_loading.vs","../src/model_loading.fs");
+    Model ourModel ("../obj/nanosuit/nanosuit.obj");
+
     // render loop
     // glfwWindowShouldClose检查GLFW是否被要求退出
     while (!glfwWindowShouldClose(window))
@@ -310,6 +315,12 @@ int main()
             lightingShader.setVec3("LightColor", lightColor);
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
+
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+        ourShader.setMat4("model", model);
+        ourModel.Draw(ourShader);
 
         // 交换颜色缓冲，其在本次迭代中用来绘制，并且将会作为输出显示在屏幕上
         glfwSwapBuffers(window);
