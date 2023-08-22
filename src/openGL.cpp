@@ -320,6 +320,10 @@ int main()
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
         model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
         ourShader.setMat4("model", model);
+        ourShader.setVec3("light.position", 0.0f, 0.0f, 3.0f);
+        ourShader.setVec3("light.ambient", 0.05f, 0.05f, 0.05f);
+        ourShader.setVec3("light.diffuse", 0.4f, 0.4f, 0.4f);
+        ourShader.setVec3("light.specular", 0.1f, 0.1f, 0.1f);
         ourModel.Draw(ourShader);
 
         // 交换颜色缓冲，其在本次迭代中用来绘制，并且将会作为输出显示在屏幕上
