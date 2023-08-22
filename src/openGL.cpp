@@ -183,9 +183,10 @@ int main()
 
     // load textures
     // -------------
-    unsigned int cubeTexture  = loadTexture("../src/container.jpg");
-    unsigned int floorTexture = loadTexture("../src/container2.png");
-
+    unsigned int cubeTexture  = loadTexture("../src/pics/container.jpg");
+    unsigned int floorTexture = loadTexture("../src/pics/container2.png");
+    unsigned int grassTexture = loadTexture("../src/pics/grass.png");
+    
     // shader configuration
     // --------------------
     shader.use();
